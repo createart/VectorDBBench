@@ -95,7 +95,7 @@ def openGaussIVFFlat(
 
 
 class openGaussHNSWTypedDict(openGaussTypedDict, HNSWFlavor1):
-    ...
+    hnsw_earlystop_threshold: Annotated[Optional[int], click.option("--hnsw_earlystop_threshold", type=int, help="hnsw_earlystop_threshold")]
 
 @cli.command()
 @click_parameter_decorators_from_typed_dict(openGaussHNSWTypedDict)
@@ -120,6 +120,7 @@ def openGaussHNSW(
             ef_search=parameters["ef_search"],
             maintenance_work_mem=parameters["maintenance_work_mem"],
             max_parallel_workers=parameters["max_parallel_workers"],
+            hnsw_earlystop_threshold=parameters["hnsw_earlystop_threshold"],
         ),
         **parameters,
     )

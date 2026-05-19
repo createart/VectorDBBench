@@ -184,6 +184,7 @@ class openGaussHNSWConfig(openGaussIndexConfig):
     index: IndexType = IndexType.ES_HNSW
     maintenance_work_mem: Optional[str] = None
     max_parallel_workers: Optional[int] = None
+    hnsw_earlystop_threshold: Optional[int] = None
 
     def index_param(self) -> openGaussIndexParam:
         index_parameters = {"m": self.m, "ef_construction": self.ef_construction}
@@ -203,7 +204,7 @@ class openGaussHNSWConfig(openGaussIndexConfig):
         }
 
     def session_param(self) -> openGaussSessionCommands:
-        session_parameters = {"hnsw_ef_search": self.ef_search}
+        session_parameters = {"hnsw_ef_search": self.ef_search, "hnsw_earlystop_threshold": self.hnsw_earlystop_threshold}
         return {
             "session_options": self._optionally_build_set_options(session_parameters)
         }

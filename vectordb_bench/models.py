@@ -99,6 +99,9 @@ class CaseConfigParamType(Enum):
     pq_m = "pq_m"
     pq_ksub = "pq_ksub"
     hnsw_earlystop_threshold = "hnsw_earlystop_threshold"
+    rbq_query_bits = "rbq_query_bits"
+    rbq_refinek = "rbq_refinek"
+    rabitq_refine_type = "rabitq_refine_type"
 
 
 class CustomizedCase(BaseModel):

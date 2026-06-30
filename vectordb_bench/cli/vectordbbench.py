@@ -12,7 +12,12 @@ from ..backend.clients.test.cli import Test
 from ..backend.clients.weaviate_cloud.cli import Weaviate
 from ..backend.clients.zilliz_cloud.cli import ZillizAutoIndex
 from ..backend.clients.tidb.cli import TiDB
-from ..backend.clients.openGauss.cli import openGaussHNSW, openGaussIVFFlat, openGaussHNSWPQ
+from ..backend.clients.openGauss.cli import (
+    openGaussHNSW,
+    openGaussHNSWPQ,
+    openGaussHNSWRabitQ,
+    openGaussIVFFlat,
+)
 from .cli import cli
 
 cli.add_command(PgVectorHNSW)
@@ -31,6 +36,7 @@ cli.add_command(AlloyDBScaNN)
 cli.add_command(MariaDBHNSW)
 cli.add_command(TiDB)
 cli.add_command(openGaussHNSW)
+cli.add_command(openGaussHNSWRabitQ)
 cli.add_command(openGaussHNSWPQ)
 cli.add_command(openGaussIVFFlat)
 

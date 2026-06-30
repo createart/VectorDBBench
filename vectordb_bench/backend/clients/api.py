@@ -30,6 +30,7 @@ class IndexType(str, Enum):
     GPU_CAGRA = "GPU_CAGRA"
     SCANN = "scann"
     HNSWPQ = "HNSWPQ"
+    HNSW_RABITQ = "HNSW_RABITQ"
 
 
 class DBConfig(ABC, BaseModel):

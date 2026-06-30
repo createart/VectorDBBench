@@ -208,7 +208,42 @@ class openGaussHNSWConfig(openGaussIndexConfig):
         return {
             "session_options": self._optionally_build_set_options(session_parameters)
         }
-    
+
+
+class openGaussHNSWRabitQConfig(openGaussHNSWConfig):
+    rbq_query_bits: int | None = 8
+    rbq_refinek: int | None = 10
+    rabitq_refine_type: str | None = "FP32"
+    index: IndexType = IndexType.HNSW_RABITQ
+
+    def index_param(self) -> openGaussIndexParam:
+        index_parameters = {
+            "m": self.m,
+            "ef_construction": self.ef_construction,
+            "enable_rabitq": "on",
+            "rabitq_refine_type": self.rabitq_refine_type,
+        }
+        return {
+            "metric": self.parse_metric(),
+            "index_type": IndexType.ES_HNSW.value,
+            "index_creation_with_options": self._optionally_build_with_options(
+                index_parameters
+            ),
+            "maintenance_work_mem": self.maintenance_work_mem,
+            "max_parallel_workers": self.max_parallel_workers,
+        }
+
+    def session_param(self) -> openGaussSessionCommands:
+        session_parameters = {
+            "hnsw_ef_search": self.ef_search,
+            "rbq_query_bits": self.rbq_query_bits,
+            "rbq_refinek": self.rbq_refinek,
+        }
+        return {
+            "session_options": self._optionally_build_set_options(session_parameters)
+        }
+
+
 class openGaussHNSWPQConfig(openGaussIndexConfig):
     """
     An HNSW index creates a multilayer graph. It has better query performance than IVFFlat (in terms of
@@ -254,6 +289,7 @@ class openGaussHNSWPQConfig(openGaussIndexConfig):
 _opengauss_case_config = {
         IndexType.HNSW: openGaussHNSWConfig,
         IndexType.HNSWPQ: openGaussHNSWPQConfig,
+        IndexType.HNSW_RABITQ: openGaussHNSWRabitQConfig,
         IndexType.ES_HNSW: openGaussHNSWConfig,
         IndexType.IVFFlat: openGaussIVFFlatConfig,
 }

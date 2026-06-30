@@ -125,6 +125,58 @@ def openGaussHNSW(
         **parameters,
     )
 
+
+class openGaussHNSWRabitQTypedDict(openGaussTypedDict, HNSWFlavor1):
+    rbq_query_bits: Annotated[
+        Optional[int],
+        click.option("--rbq_query_bits", type=int, default=8, help="rbq_query_bits"),
+    ]
+    rbq_refinek: Annotated[
+        Optional[int],
+        click.option("--rbq_refinek", type=int, default=10, help="rbq_refinek"),
+    ]
+    rabitq_refine_type: Annotated[
+        Optional[str],
+        click.option(
+            "--rabitq_refine_type",
+            type=str,
+            default="FP32",
+            help="rabitq_refine_type",
+        ),
+    ]
+
+
+@cli.command()
+@click_parameter_decorators_from_typed_dict(openGaussHNSWRabitQTypedDict)
+def openGaussHNSWRabitQ(
+    **parameters: Unpack[openGaussHNSWRabitQTypedDict],
+):
+    from .config import openGaussConfig, openGaussHNSWRabitQConfig
+
+    run(
+        db=DB.openGauss,
+        db_config=openGaussConfig(
+            db_label=parameters["db_label"],
+            user_name=SecretStr(parameters["user_name"]),
+            password=SecretStr(parameters["password"]),
+            host=parameters["host"],
+            port=parameters["port"],
+            db_name=parameters["db_name"],
+        ),
+        db_case_config=openGaussHNSWRabitQConfig(
+            m=parameters["m"],
+            ef_construction=parameters["ef_construction"],
+            ef_search=parameters["ef_search"],
+            maintenance_work_mem=parameters["maintenance_work_mem"],
+            max_parallel_workers=parameters["max_parallel_workers"],
+            rbq_query_bits=parameters["rbq_query_bits"],
+            rbq_refinek=parameters["rbq_refinek"],
+            rabitq_refine_type=parameters["rabitq_refine_type"],
+        ),
+        **parameters,
+    )
+
+
 class openGaussHNSWPQTypedDict(openGaussTypedDict, HNSWFlavor1):
     pq_m: Annotated[Optional[int], click.option("--pq_m", type=int, help="hnsw_pq_m")]
     pq_ksub: Annotated[Optional[int], click.option("--pq_ksub", type=int, help="hnsw_pq_ksub")]

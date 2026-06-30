@@ -332,6 +332,7 @@ CaseConfigParamInput_IndexType_openGauss = CaseConfigInput(
     inputConfig={
         "options": [
             IndexType.HNSW.value,
+            IndexType.HNSW_RABITQ.value,
             IndexType.IVFFlat.value,
             IndexType.HNSWPQ.value,
         ],
@@ -358,7 +359,8 @@ CaseConfigParamInput_M = CaseConfigInput(
         "max": 64,
         "value": 30,
     },
-    isDisplayed=lambda config: config.get(CaseConfigParamType.IndexType, None) == IndexType.HNSW.value,
+    isDisplayed=lambda config: config.get(CaseConfigParamType.IndexType, None)
+    in [IndexType.HNSW.value, IndexType.HNSW_RABITQ.value],
 )
 
 CaseConfigParamInput_m = CaseConfigInput(
@@ -521,6 +523,18 @@ CaseConfigParamInput_EFConstruction_openGauss = CaseConfigInput(
     },
     isDisplayed=lambda config: config[CaseConfigParamType.IndexType]
     == IndexType.HNSW.value,
+)
+
+CaseConfigParamInput_EFConstruction_openGaussRabitQ = CaseConfigInput(
+    label=CaseConfigParamType.ef_construction,
+    inputType=InputType.Number,
+    inputConfig={
+        "min": 8,
+        "max": 1024,
+        "value": 64,
+    },
+    isDisplayed=lambda config: config[CaseConfigParamType.IndexType]
+    == IndexType.HNSW_RABITQ.value,
 )
 
 CaseConfigParamInput_EFConstruction_openGaussPQ = CaseConfigInput(
@@ -882,6 +896,52 @@ CaseConfigParamInput_EFSearch_openGauss = CaseConfigInput(
     },
     isDisplayed=lambda config: config.get(CaseConfigParamType.IndexType, None)
     == IndexType.HNSW.value,
+)
+
+CaseConfigParamInput_EFSearch_openGaussRabitQ = CaseConfigInput(
+    label=CaseConfigParamType.ef_search,
+    inputType=InputType.Number,
+    inputConfig={
+        "min": 1,
+        "max": 2048,
+        "value": 256,
+    },
+    isDisplayed=lambda config: config.get(CaseConfigParamType.IndexType, None)
+    == IndexType.HNSW_RABITQ.value,
+)
+
+CaseConfigParamInput_RBQQueryBits_openGaussRabitQ = CaseConfigInput(
+    label=CaseConfigParamType.rbq_query_bits,
+    inputType=InputType.Number,
+    inputConfig={
+        "min": 1,
+        "max": 64,
+        "value": 8,
+    },
+    isDisplayed=lambda config: config.get(CaseConfigParamType.IndexType, None)
+    == IndexType.HNSW_RABITQ.value,
+)
+
+CaseConfigParamInput_RBQRefinek_openGaussRabitQ = CaseConfigInput(
+    label=CaseConfigParamType.rbq_refinek,
+    inputType=InputType.Number,
+    inputConfig={
+        "min": 1,
+        "max": 10000,
+        "value": 10,
+    },
+    isDisplayed=lambda config: config.get(CaseConfigParamType.IndexType, None)
+    == IndexType.HNSW_RABITQ.value,
+)
+
+CaseConfigParamInput_RabitQRefineType_openGaussRabitQ = CaseConfigInput(
+    label=CaseConfigParamType.rabitq_refine_type,
+    inputType=InputType.Option,
+    inputConfig={
+        "options": ["FP32"],
+    },
+    isDisplayed=lambda config: config.get(CaseConfigParamType.IndexType, None)
+    == IndexType.HNSW_RABITQ.value,
 )
 
 CaseConfigParamInput_EFSearch_openGaussPQ = CaseConfigInput(
@@ -1371,6 +1431,8 @@ openGaussLoadingConfig = [
     CaseConfigParamInput_Lists_openGauss,
     CaseConfigParamInput_m,
     CaseConfigParamInput_EFConstruction_openGauss,
+    CaseConfigParamInput_EFConstruction_openGaussRabitQ,
+    CaseConfigParamInput_RabitQRefineType_openGaussRabitQ,
     CaseConfigParamInput_M_openGaussPQ,
     CaseConfigParamInput_EFConstruction_openGaussPQ,
     CaseConfigParamInput_PQM_openGaussPQ,
@@ -1384,6 +1446,11 @@ openGaussPerformanceConfig = [
     CaseConfigParamInput_m,
     CaseConfigParamInput_EFConstruction_openGauss,
     CaseConfigParamInput_EFSearch_openGauss,
+    CaseConfigParamInput_EFConstruction_openGaussRabitQ,
+    CaseConfigParamInput_EFSearch_openGaussRabitQ,
+    CaseConfigParamInput_RBQQueryBits_openGaussRabitQ,
+    CaseConfigParamInput_RBQRefinek_openGaussRabitQ,
+    CaseConfigParamInput_RabitQRefineType_openGaussRabitQ,
     CaseConfigParamInput_Lists_openGauss,
     CaseConfigParamInput_Probes_openGauss,
     CaseConfigParamInput_M_openGaussPQ,
